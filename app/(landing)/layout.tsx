@@ -1,4 +1,4 @@
-import TopNav from "@/app/ui/TopNav";
+import TopNav from "@/app/ui/topnav";
 
 /**
  * This will hold the top bar that will be present in the front-page. It will only contain
@@ -11,11 +11,12 @@ import TopNav from "@/app/ui/TopNav";
  */
 export default function Layout({ children } : { children : React.ReactNode}) {
     return (
-        <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-            <div className="w-full flex-none md:w-80">
+        <div className="flex h-screen flex-col">
+            <div className="fixed w-full z-10 text-white">
                 <TopNav />
             </div>
-            <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+            {/*Need padding to push the fixed nav-bar and content in the right place*/}
+            <div className="flex-1 m-0 -z-10">{children}</div>
         </div>
     );
 }
