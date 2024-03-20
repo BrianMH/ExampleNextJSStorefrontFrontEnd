@@ -16,8 +16,8 @@ export default function Layout({ children } : { children : React.ReactNode}) {
                 <TopNav />
             </div>
             {/*Need padding to push the fixed nav-bar and content in the right place*/}
-            <div className="flex-1 m-0 -z-10">{children}</div>
-            <div className="bg-gray-100">Footer</div>
+            <div className="flex-1 m-0 z-10">{children}</div>
+            <div className="bg-gray-100 text-center">Site made for demo purposes only.</div>
         </div>
     );
 }
