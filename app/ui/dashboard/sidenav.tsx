@@ -5,6 +5,7 @@ import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import StoreLogo from '@/app/ui/store-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
+import {signOut} from "@/auth";
 
 export default function SideNav() {
     return (
@@ -23,8 +24,7 @@ export default function SideNav() {
                 <form
                     action={async ()  => {
                         'use server';
-
-                        // TODO: FINISH SIGN OUT MECHANISM HERE VIA AUTH CALLBACK
+                        await signOut();
                     }}>
                     <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-red-800 p-3 text-sm text-white font-medium hover:bg-red-700 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3">
                         <PowerIcon className="w-6" />

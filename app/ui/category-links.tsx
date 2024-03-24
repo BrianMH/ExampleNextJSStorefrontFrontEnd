@@ -25,7 +25,7 @@ export default function CategoryLinks() {
                         href={link.href}
                         className={clsx("flex h-[48px] grow items-center justify-center gap-4 p-3 text-2xl font-bold hover:text-gray-400 md:flex-none md:justify-start md:p-2 md:px-3 ",
                             {
-                                'border-[6px] rounded-md border-transparent border-b-black': pathName === link.href,
+                                'border-[6px] rounded-md border-transparent border-b-black': pathName.startsWith(link.href),
                             })}
                     >
                         <p>{link.name}</p>

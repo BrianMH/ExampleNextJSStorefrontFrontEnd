@@ -67,7 +67,7 @@ export default function NavLinks() {
                         href={link.href}
                         className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3 ",
                             {
-                                'text-[color:white] bg-gray-800': pathName === link.href,
+                                'bg-gray-800 text-white': pathName === link.href,
                             })}
                     >
                         <LinkIcon className="w-6"/>
@@ -87,24 +87,26 @@ export default function NavLinks() {
                 <ChevronRightIcon id="ddRight-ecommerce" className="w-6" />
             </button>
             {/*Hidden tag can be removed to show pages via JS*/}
-            <ul id="dropdown-pages" className="hidden px-4 space-y-2">
-                {eCommerceLinks.map((link) => {
-                    const LinkIcon = link.icon;
-                    return (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3 ",
-                                {
-                                    'text-[color:white] bg-gray-800': pathName === link.href,
-                                })}
-                        >
-                            <LinkIcon className="w-6"/>
-                            <p className="hidden md:block">{link.name}</p>
-                        </Link>
-                    );
-                })}
-            </ul>
+            <div>
+                <ul id="dropdown-pages" className="hidden px-4 space-y-2 flex-col relative md:static md:flex-none">
+                    {eCommerceLinks.map((link) => {
+                        const LinkIcon = link.icon;
+                        return (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3 ",
+                                    {
+                                        'text-white bg-gray-800': pathName === link.href,
+                                    })}
+                            >
+                                <LinkIcon className="w-6"/>
+                                <p className="hidden md:block">{link.name}</p>
+                            </Link>
+                        );
+                    })}
+                </ul>
+            </div>
         </>
     );
 }

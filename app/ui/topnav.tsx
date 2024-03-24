@@ -4,10 +4,11 @@
 'use client';
 
 import {useState} from "react";
-import {ShoppingBagIcon, ShoppingCartIcon} from "@heroicons/react/24/outline";
+import {ShoppingCartIcon} from "@heroicons/react/24/outline";
 import StoreLogo from "@/app/ui/store-logo";
 import Link from "next/link";
 import CategoryLinks from "@/app/ui/category-links";
+import StatefulShoppingCartIcon from "@/app/ui/cartIcon";
 
 // used for the cart's link
 const cartLink = { name: "cart", href: "/cart"}
@@ -34,9 +35,9 @@ export default function TopNav() {
                     <Link
                         key={cartLink.name}
                         href={cartLink.href}
-                        className="grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium hover:text-gray-400 md:flex-none md:justify-start md:p-2 md:px-3 "
+                        className="grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium md:flex-none md:justify-start md:p-2 md:px-3 "
                     >
-                        <ShoppingBagIcon className="h-[30px]" />
+                        <StatefulShoppingCartIcon />
                     </Link>
                 </div>
 
