@@ -9,6 +9,10 @@ import UserAddressEditForm from "@/app/ui/account/addresses/address-form-with-de
 import {Address} from "@/app/lib/definitions";
 import {fetchAddressById} from "@/app/lib/data";
 
+export const metadata = {
+    title: "Edit Address",
+}
+
 export default async function EditAddressForm({ params } : { params : { id : string } }) {
     // grab our auth param so that we can consider it for the auth
     const authToken = await auth();

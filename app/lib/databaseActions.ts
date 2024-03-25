@@ -14,6 +14,9 @@ import {revalidatePath} from "next/cache";
 import bcrypt from "bcrypt";
 import * as fs from "fs";
 
+/**
+ * Returns the store hours (this is NOT database associated currently)
+ */
 export async function getStoreHours() {
     // first we get the results from the database
     // TODO: Replace this with database logic
@@ -77,6 +80,11 @@ const MessageFormSchema = z.object({
 })
 const CreateMessage = MessageFormSchema.omit({id: true, date: true})
 
+/**
+ * Allows a user to create a message to be received by the inbox given contact form data
+ * @param prevState
+ * @param formData
+ */
 export async function createMessage(prevState : MessageState, formData : FormData) {
     const validatedFields = CreateMessage.safeParse({
         name: formData.get("name"),
@@ -155,6 +163,7 @@ const AvatarSchema = z.object({
               }),
 })
 
+const AddUser = UserFormSchema.omit({userId: true, role: true, confirm: true, avatarRef: true});
 const UpdateEmail = UserFormSchema.omit({username: true, screenName: true, role: true, password: true, avatarRef: true})
                                                                           .refine((data) => data.email === data.confirm,
                                                                               {
@@ -443,6 +452,51 @@ export async function authenticate(
     }
 }
 
+/**
+ * While above only deals with authentication, this function first persists the user
+ * to the database (waits for the response), and then performs the registration.
+ *
+ * @param prevState
+ * @param formData
+ */
+export async function addUserAndAuthenticate(
+    prevState: string | undefined,
+    formData: FormData,
+) {
+    // first we need to persist the user to the database using our FormData
+    const validatedFields = AddUser.safeParse({
+        email: formData.get("email"),
+        username: formData.get("username"),
+        screenName: formData.get("screenName"),
+        password: formData.get("password"),
+    });
+
+    if(!validatedFields.success) {
+        console.log("Failed to process input: ", validatedFields.error.flatten().fieldErrors);
+        return "Improperly formatted input field"
+    }
+
+    try {
+        // we should encrypt user password before sending it out to the server
+        validatedFields.data.password = await bcrypt.hash(validatedFields.data.password, 11);
+
+        const relEndpoint = process.env.API_ENDPOINT_ROOT + '/api/users/add';
+        const response = await makeLocalRequestWithData(relEndpoint, "POST", true, validatedFields.data);
+
+        // make sure our response is properly formatted before continuing login
+        if("message" in response) {
+            console.log(response["message"]);
+            return "Error on user creation..."
+        }
+    } catch(error) {
+        console.log("Failed to create user. Aborting due to :", error);
+        return "Failed to create user due to database error.";
+    }
+
+    // And now we can proceed to begin authentication
+    return await authenticate(undefined, formData);
+}
+
 /***************************************************************************************
                                     ADDRESS RELATED FUNCTIONS
  *************************************************************************************/
@@ -482,6 +536,12 @@ const AddressFormSchema = z.object({
 const AddAddress = AddressFormSchema.omit({addressId: true});
 const UpdateAddress = z.optional(AddressFormSchema.omit({queryUser: true}));
 
+/**
+ * Update's a user's address given form data
+ * @param addressId
+ * @param prevState
+ * @param formData
+ */
 export async function updateUserAddress(addressId: string, prevState: AddressState, formData: FormData) {
     const validatedFields = UpdateAddress.safeParse({
         addressId: addressId,
@@ -595,4 +655,48 @@ export async function addAddressToUser(userId: string, prevState: AddressState, 
 
     // This will never be reached, but it does shut the interpreter up about typing issues
     return prevState;
+}
+
+/***************************************************************************************
+                            NOTIFICATION RELATED FUNCTIONS
+ *************************************************************************************/
+/**
+ * Asks our database to change the enabled element of the notification
+ * @param notifId
+ * @param toChangeTo
+ * @param state
+ * @param formData
+ */
+export async function toggleNotifications(notifId: string, toChangeTo: boolean, state: string|null, formData: FormData) : Promise<string|null> {
+    try {
+        const relEndpoint = process.env.API_ENDPOINT_ROOT + `/api/notifications/${notifId}`;
+        await makeLocalRequestWithData(relEndpoint, "PATCH", true, {enabled: toChangeTo});
+
+        revalidatePath('/account/notifications');
+
+        return "success";
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
+/**
+ * Asks our database to delete a given notification based on the passed id.
+ * @param notifId
+ * @param state
+ * @param formData
+ */
+export async function deleteNotification(notifId: string, state: string|null, formData: FormData) : Promise<string|null> {
+    try {
+        const relEndpoint = process.env.API_ENDPOINT_ROOT + `/api/notifications/${notifId}`;
+        await makeLocalRequestWithData(relEndpoint, "DELETE", true);
+
+        revalidatePath('/account/notifications');
+
+        return "success";
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
 }

@@ -2,6 +2,7 @@
  * Registration form for a user
  */
 import LoginForm from "@/app/ui/login-form";
+import RegisterForm from "@/app/ui/register-form";
 
 export default function RegisterPage() {
     return (
@@ -9,8 +10,8 @@ export default function RegisterPage() {
             <div className="bg-gray-100 w-full h-fit -mt-5 align-middle justify-center border-t-2 border-b-2">
                 <h1 className="text-[80px] font-extrabold text-center">Register</h1>
             </div>
-            <div className="h-full flex flex-col justify-center">
-                <p>This is the register page</p>
+            <div className="h-full min-w-[20%] flex flex-col justify-center">
+                <RegisterForm />
             </div>
         </main>
     )

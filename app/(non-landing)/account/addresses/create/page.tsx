@@ -6,6 +6,10 @@ import {redirect} from "next/navigation";
 import {ChevronLeftIcon} from "@heroicons/react/24/solid";
 import {auth} from "@/auth";
 
+export const metadata = {
+    title: "Create Address",
+}
+
 export default async function createAddressPage() {
     // grab our auth param so that we can consider it for the auth
     const authToken = await auth();

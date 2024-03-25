@@ -67,7 +67,7 @@ export default function NavLinks() {
                         href={link.href}
                         className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3 ",
                             {
-                                'bg-gray-800 text-white': pathName === link.href,
+                                'bg-gray-800 text-white': link.href === "/dashboard" ? pathName === link.href : pathName.startsWith(link.href),
                             })}
                     >
                         <LinkIcon className="w-6"/>
@@ -97,7 +97,7 @@ export default function NavLinks() {
                                 href={link.href}
                                 className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3 ",
                                     {
-                                        'text-white bg-gray-800': pathName === link.href,
+                                        'text-white bg-gray-800': link.href === "/dashboard" ? pathName === link.href : pathName.startsWith(link.href),
                                     })}
                             >
                                 <LinkIcon className="w-6"/>

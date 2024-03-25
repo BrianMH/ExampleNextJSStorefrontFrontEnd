@@ -2,7 +2,15 @@
  * Holds the methods that will be returning all the desired values from the server
  */
 import {unstable_noStore as noStore} from "next/cache";
-import type {Address, Message, ShortenedMessage, User} from "@/app/lib/definitions";
+import type {
+    Address,
+    Message,
+    ProductCategory,
+    ShortenedMessage,
+    User,
+    Notification,
+    Product
+} from "@/app/lib/definitions";
 
 type RequestType = "POST" | "GET" | "DELETE" | "PATCH" | "PUT";
 type PayloadType = Record<string, any> | null;
@@ -116,6 +124,27 @@ export async function fetchUserByEmail(
 }
 
 /**
+ * Fetches users but in a paged way that allows for querying
+ * @param query
+ * @param currentPage
+ * @param pageSize
+ */
+export async function fetchPagedUsers(
+    query: string,
+    currentPage: number,
+    pageSize: number = DEFAULT_PAGE_SIZE
+) : Promise<User[]> {
+    // because our pages are actually 0-indexed server side, we can go ahead and increment it here
+    const actualPage = currentPage - 1;
+
+    // fetch our paged values given our current page (and offset if passed)
+    const relEndpoint: string = process.env.API_ENDPOINT_ROOT + `/api/users/paged/${pageSize}/${actualPage}?query=${query}`;
+
+    // then access the endpoint
+    return makeLocalRequestWithData(relEndpoint, "GET", true);
+}
+
+/**
  * Fetches a list of addresses given a specific user.
  */
 export async function fetchAddressesByUser(
@@ -129,6 +158,26 @@ export async function fetchAddressesByUser(
     return response;
 }
 
+/**
+ * Fetches the number of user pages present given a specific page size on the customers page
+ * @param query
+ * @param pageSize
+ */
+export async function fetchNumUserPages(
+    query: string,
+    pageSize: number = DEFAULT_PAGE_SIZE
+) : Promise<number> {
+    // first use our endpoint
+    const relEndpoint: string = process.env.API_ENDPOINT_ROOT + `/api/users/paged/${pageSize}?query=${query}`;
+
+    // then access endpoint like before
+    return makeLocalRequestWithData(relEndpoint, "GET", true);
+}
+
+/**
+ * Fetches a given address by its ID
+ * @param addressId
+ */
 export async function fetchAddressById(
     addressId: string
 ): Promise<Address> {
@@ -137,5 +186,85 @@ export async function fetchAddressById(
     // then return the response
     const response = await makeLocalRequestWithData(relEndpoint, "GET", true);
 
+    return response;
+}
+
+/**
+ * Fetches a list of product categories available in the backend
+ */
+export async function fetchProductCategories() : Promise<ProductCategory[]> {
+    const relEndpoint : string = process.env.API_ENDPOINT_ROOT + '/api/categories/all';
+
+    // then return the response
+    const response = await makeLocalRequestWithData(relEndpoint, "GET", true);
+
+    return response;
+}
+
+/**
+ * Fetches our products that fall under a given category
+ * @param catId the category id to receive the products for
+ */
+export async function fetchCategoryWithProducts(
+    catId : string
+) : Promise<ProductCategory> {
+    const relEndpoint : string = process.env.API_ENDPOINT_ROOT + `/api/categories/${catId}`;
+
+    // then return the response
+    const response = await makeLocalRequestWithData(relEndpoint, "GET", true);
+    return response;
+}
+
+/**
+ * Returns notifications associated with a given user
+ * @param userId
+ */
+export async function fetchNotificationsByUser(
+    userId: string
+) : Promise<Notification[]> {
+    const relEndpoint : string = process.env.API_ENDPOINT_ROOT + `/api/notifications/byUser/${userId}`;
+
+    // then return response
+    const response = await makeLocalRequestWithData(relEndpoint, "GET", true);
+    return response;
+}
+
+/**
+ * Returns the number of pages to be expected given products matching a query and category id
+ * @param query
+ * @param category
+ * @param numPerPage
+ */
+export async function fetchNumberProductPages(
+    query: string,
+    category: string,
+    numPerPage: number = 24
+): Promise<number> {
+    const relEndpoint : string = process.env.API_ENDPOINT_ROOT + `/api/products/paged/${numPerPage}?query=${query}` + (category ? `&catId=${category}` : '');
+
+    // then return response
+    const response = await makeLocalRequestWithData(relEndpoint, "GET", true);
+    return response;
+}
+
+
+/**
+ * Allows us to make a specialized query with the database in a paginated manner in order to return mathing Procuts
+ * @param query
+ * @param category
+ * @param currentPage
+ * @param numPerPage
+ */
+export async function fetchProductsWithQueryAndCategory(
+    query: string,
+    category: string,
+    currentPage: number,
+    numPerPage: number = 24
+) : Promise<Product[]> {
+    const actualPage = currentPage-1; // 0-indexed pages
+    const relEndpoint : string = process.env.API_ENDPOINT_ROOT + `/api/products/paged/${numPerPage}/${actualPage}?query=${query}` + (category ? `&catId=${category}` : '');
+
+    // then return response
+    const response = await makeLocalRequestWithData(relEndpoint, "GET", true);
     return response;
 }

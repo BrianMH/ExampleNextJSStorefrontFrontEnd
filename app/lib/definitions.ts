@@ -58,3 +58,33 @@ export type Address = {
 
     queryUser: string; // this holds the owning user's ID
 }
+
+// defines the product category type
+export type ProductCategory = {
+    id: string;
+    name: string;
+    description: string;
+    imageRef: string;
+
+    relProducts?: Product[];
+}
+
+// defines what can be seen from inside our product tuple
+export type Product = {
+    productId: string;
+    name: string;
+    description: string;
+    outOfStock: boolean;
+    carouselList: string[];
+    priceInCents: number;
+
+    category: ProductCategory;
+}
+
+// defines our Notification data type
+export type Notification = {
+    id: string;
+    ownedBy: User;
+    notifyFor: ProductCategory;
+    enabled: boolean;
+}

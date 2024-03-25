@@ -1,30 +1,18 @@
-/**
- * Based off the Next.JS tutorial search bar. This search bar augments the URL with a query value whenever the user
- * passes a value into it.
- */
 'use client';
-
+/**
+ * Performs the same operations that the normal search component does, but using the product-based context created
+ */
 import {MagnifyingGlassIcon} from '@heroicons/react/24/outline';
-import {useSearchParams, usePathname, useRouter} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import {useDebouncedCallback} from "use-debounce";
+import {useSearchParamContextData} from "@/app/ui/products/search-param-context";
 
-export default function Search({placeholder}: { placeholder: string }) {
+export default function SearchUnderContext({placeholder}: { placeholder: string }) {
+    // we can read normally as these are generally immutable
     const searchParam = useSearchParams();
-    const pathname = usePathname();
-    const { replace } = useRouter();
 
     // And then use the search params to manipulate the current URL
-    const handleSearch = useDebouncedCallback((term: string) => {
-        const params = new URLSearchParams();
-        params.set('page', '1');
-        if(term) {
-            params.set('query', term);
-        } else {
-            params.delete('query');
-        }
-
-        replace(`${pathname}?${params.toString()}`);
-    }, 300);
+    const handleSearch = useDebouncedCallback(useSearchParamContextData().bind(null, "search"), 300);
 
     return (
         <div className="relative flex flex-1 flex-shrink-0">

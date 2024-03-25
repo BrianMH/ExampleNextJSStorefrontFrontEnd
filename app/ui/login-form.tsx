@@ -11,9 +11,12 @@ import { Button } from './button';
 import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/app/lib/databaseActions";
 import Link from "next/link";
+import {redirect, useSearchParams} from "next/navigation";
 
 export default function LoginForm(){
     const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+    const searchParams = useSearchParams();
+    const redirectURL = searchParams.get("callbackUrl")+"";
 
     return (
         <form action={dispatch} className="space-y-3">
@@ -78,8 +81,8 @@ export default function LoginForm(){
                     )}
                 </div>
                 <div className="flex h-8 items-end space-x-1">
-                    <Link className="text-blue-700 text-sm font-bold" href="/register">
-                        Don't have an account? Register here.
+                    <Link className="text-blue-700 text-sm font-bold" href={`/register?callbackUrl=${encodeURIComponent(redirectURL)}`}>
+                        Don&apos;t have an account? Register here.
                     </Link>
                 </div>
             </div>

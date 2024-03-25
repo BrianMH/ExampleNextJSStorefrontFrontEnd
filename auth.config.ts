@@ -23,7 +23,7 @@ export const authConfig = {
             const isOnAccountPage = nextUrl.pathname.startsWith('/account');
 
             // and we can check if we are on the login page to move the user away once authenticated
-            const isOnLoginPage = nextUrl.pathname.startsWith('/login');
+            const isOnLoginPage = nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/register');
 
             // then proceed to block requests given certain pages
             if(isOnDashboard) {
@@ -41,7 +41,7 @@ export const authConfig = {
                 if(isLoggedIn) return true; // pass user through again if logged
                 return false; // push back to login
             } else if(isOnLoginPage && isLoggedIn) {
-                return Response.redirect(new URL(callbackUrl));
+                return Response.redirect(new URL(callbackUrl, nextUrl));
             } else {
                 return true; // these are pages that do not require authentication
             }

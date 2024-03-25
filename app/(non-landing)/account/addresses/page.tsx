@@ -4,6 +4,10 @@
 import {auth} from "@/auth";
 import AddressSelectionDisplay from "@/app/ui/account/addresses/address-selection-display";
 
+export const metadata = {
+    title: "Saved Addresses",
+}
+
 export default async function AddressesOverview() {
 
     // grab our auth param so that we can consider it for the auth

@@ -1,7 +1,7 @@
 import InboxTable from "@/app/ui/dashboard/inbox/table";
-import {fetchNumPages, fetchPagedMessages} from "@/app/lib/data";
+import {fetchNumPages} from "@/app/lib/data";
 import Search from "@/app/ui/search";
-import Pagination from "@/app/dashboard/inbox/pagination";
+import Pagination from "@/app/ui/dashboard/inbox/pagination";
 import {interTight} from "@/app/ui/fonts";
 
 // Used in order to modify search query
