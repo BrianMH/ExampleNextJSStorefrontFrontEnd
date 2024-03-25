@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.JS Storefront Example
 
-## Getting Started
+An attempt at creating a storefront using an API completely new to me 
+(I previously worked only with Flask). While it
+could have also been created as an SPA using bare React, NextJS had a few aspects
+I thought were a bit more intuitive to go through compared to bare React (namely a
+proper implementation of a router as opposed to a logical one).
 
-First, run the development server:
+One thing I enjoyed about Next.JS is the ease of being able to create quite dynamic
+routes using the app router. Being able to group things and then associate errors/layouts
+to certain routes using groups and create parameter-based pages in a natural
+directory structure similar to how a static page server works is convenient.
 
+And being able to populate values from the server without passing API information
+to the user seems like an incredible useful aspect for a secure website. That doesn't
+mean there shouldn't be any security on the back-end, however...
+
+Run the application using the typical command:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Note
+Keep in mind that as is this program is quite heavily tied to the Java based back-end which can
+be found [here](https://github.com/BrianMH/ExampleSpringStorefrontBackend)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Potential Issues
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+* Performance issues associated with improper client-sided information delivery (in particular with products page)
+* Odd UI choices in general (this was largely due to trying to commit to solely using TailwindCSS)
+* Broken routes (This applies mostly to add routes like ```/dashboard/products/category/new```
+but it also affects certain view routes such as ```/products/[productId]``)
 
-## Learn More
+## Reflection
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+All-in-all it was an enjoyable learning experience, but I think next time I will try and
+rely on component libraries to build simple websites. While you definitely get a lot more
+customization options when designing the page using raw HTML and TailwindCSS' classes, it
+takes quite a significant amount of time to move from a sketch of the site to the implementation
+(and that's not taking into account that dynamic changes to websites to allow for responsiveness
+and user-oriented experiences increase the time to an MVP significantly).
