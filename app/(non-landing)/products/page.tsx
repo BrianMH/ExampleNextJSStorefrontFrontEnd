@@ -14,7 +14,7 @@ interface searchParamType {
         category?: string;
         query?: string;
         page?: string;
-        numPerPage?: string;
+        pageSize?: string;
     };
 }
 
@@ -23,7 +23,7 @@ export default async function ProductsPage({searchParams,} : searchParamType) {
     const query = searchParams?.query || '';
     const category = searchParams?.category || '';
     const currentPage = Number(searchParams?.page) || 1;
-    const numPerPage = Number(searchParams?.numPerPage) || 24;
+    const numPerPage = Number(searchParams?.pageSize) || 24;
     const totalPages = await fetchNumberProductPages(query, category, numPerPage);
 
     // along with our products corresponding to these pages

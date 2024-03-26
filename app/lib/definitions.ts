@@ -28,6 +28,8 @@ export type User = {
     password: string; // this is bcrypt encrypted!
     avatarRef: string; // and this holds an accessible image file URL
     role: string;   // holds authorization roles
+
+    userId: string; // this is only used by next-auth by default
 }
 
 // Defines a cart item in as barebones a way as possible

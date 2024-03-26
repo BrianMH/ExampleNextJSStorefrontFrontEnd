@@ -2,6 +2,7 @@
  * An extremely simple login page just to appease the Next.JS based verification
  */
 import LoginForm from "@/app/ui/login-form";
+import {Suspense} from "react";
 
 export const metadata = {
     title: "Login",
@@ -14,7 +15,9 @@ export default function LoginPage() {
                 <h1 className="text-[80px] font-extrabold text-center">Login</h1>
             </div>
             <div className="h-full flex flex-col justify-center">
-                <LoginForm />
+                <Suspense>
+                    <LoginForm />
+                </Suspense>
             </div>
         </main>
     );
